@@ -73,9 +73,9 @@ body {
   border-radius: 8px;
   border: 2px solid #193a55;
   background: #aee2f4 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='%23193a55' d='M2 4l4 4 4-4'/></svg>") no-repeat right 10px center;
-  color: #193a55;
+  color: #0094ca;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
