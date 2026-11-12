@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pokémon Team Generator</title>
   <link rel="icon" type="image/png" href="favicon.png" />
-  <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
   <main class="app">
@@ -15,14 +15,13 @@
     </header>
 
     <section class="panel">
-      <h2>Available Pokémon</h2>
+      <h2 id="availableHeading">Available Pokémon</h2>
       <div class="game-row">
         <label for="gameSelect">Game:</label>
         <select id="gameSelect">
           <option value="all">All Pokémon</option>
         </select>
       </div>
-      <div id="countLabel" class="count">Loading Pokémon...</div>
       <textarea id="peopleLabel" readonly placeholder="Loading Pokémon..."></textarea>
     </section>
 
@@ -41,6 +40,6 @@
     </section>
   </main>
 
-  <script src="code.js?v=3"></script>
+  <script src="code.js?v=4"></script>
 </body>
 </html>

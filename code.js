@@ -8,7 +8,7 @@ const peopleLabel = document.getElementById('peopleLabel');
 const pairLabel = document.getElementById('pairLabel');
 const randomAssignButton = document.getElementById('randomAssignButton');
 const gameSelect = document.getElementById('gameSelect');
-const countLabel = document.getElementById('countLabel');
+const availableHeading = document.getElementById('availableHeading');
 
 function parseCSV(text) {
   // Strip a leading BOM if present
@@ -79,7 +79,7 @@ function renderAvailable() {
   peopleLabel.value = availablePokemon.map(function (p) {
     return p.name;
   }).join('\n');
-  countLabel.textContent = availablePokemon.length + ' available Pokémon';
+  availableHeading.textContent = 'Available Pokémon (' + availablePokemon.length + ')';
 }
 
 async function loadPokemon() {
