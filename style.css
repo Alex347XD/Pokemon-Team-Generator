@@ -55,24 +55,42 @@ body {
 
 .game-row {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
 }
 
 .game-row label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0.3px;
+  opacity: 0.9;
 }
 
 .game-row select {
-  flex: 1;
-  padding: 6px 8px;
-  border-radius: 6px;
+  width: 100%;
+  padding: 8px 36px 8px 10px;
+  border-radius: 8px;
   border: 2px solid #193a55;
-  background: #aee2f4;
-  color: #0094ca;
+  background: #aee2f4 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='%23193a55' d='M2 4l4 4 4-4'/></svg>") no-repeat right 10px center;
+  color: #193a55;
   font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-row select:hover {
+  border-color: #0094ca;
+}
+
+.game-row select:focus {
+  outline: none;
+  border-color: #0094ca;
+  box-shadow: 0 0 0 3px rgba(0, 148, 202, 0.25);
 }
 
 #peopleLabel {
