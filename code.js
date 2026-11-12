@@ -82,7 +82,7 @@ function renderAvailable() {
 
 async function loadPokemon() {
   try {
-    const response = await fetch('Pokedex.csv');
+    const response = await fetch('Pokedex.csv', { cache: 'no-store' });
     if (!response.ok) {
       throw new Error('Failed to load Pokedex.csv (' + response.status + ')');
     }
@@ -154,7 +154,7 @@ randomAssignButton.addEventListener('click', function () {
 
 async function loadGames() {
   try {
-    const response = await fetch('games.json');
+    const response = await fetch('games.json', { cache: 'no-store' });
     if (!response.ok) throw new Error('Failed to load games.json');
     gamesData = await response.json();
 
