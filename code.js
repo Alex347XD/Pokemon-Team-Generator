@@ -62,16 +62,7 @@ function parseCSV(text) {
 }
 
 let allowedIds = null; // null = all Pokémon
-const gameCache = {};
-
-// DLC version groups folded into their base game
-const DLC_PARENT = {
-  'the-isle-of-armor': 'sword-shield',
-  'the-crown-tundra': 'sword-shield',
-  'the-teal-mask': 'scarlet-violet',
-  'the-indigo-disk': 'scarlet-violet',
-  'mega-dimension': 'legends-za'
-};
+let gamesData = null;
 
 function resetPokemon() {
   availablePokemon = allPokemon
@@ -161,23 +152,16 @@ randomAssignButton.addEventListener('click', function () {
   renderAvailable();
 });
 
-function prettyGameName(name) {
-  return name.split('-').map(function (w) {
-    return w.charAt(0).toUpperCase() + w.slice(1);
-  }).join(' ');
-}
-
 async function loadGames() {
   try {
-    const response = await fetch('https://pokeapi.co/api/v2/version-group?limit=100');
-    if (!response.ok) return;
-    const data = await response.json();
-    (data.results || []).forEach(function (vg) {
-      // Skip DLC-only entries; they are merged into their base game
-      if (DLC_PARENT[vg.name]) return;
+    const response = await fetch('games.json');
+    if (!response.ok) throw new Error('Failed to load games.json');
+    gamesData = await response.json();
+
+    Object.keys(gamesData).forEach(function (key) {
       const option = document.createElement('option');
-      option.value = vg.name;
-      option.textContent = prettyGameName(vg.name);
+      option.value = key;
+      option.textContent = gamesData[key].label;
       gameSelect.appendChild(option);
     });
   } catch (err) {
@@ -185,47 +169,19 @@ async function loadGames() {
   }
 }
 
-gameSelect.addEventListener('change', async function () {
+gameSelect.addEventListener('change', function () {
   const value = gameSelect.value;
-  peopleLabel.value = 'Loading Pokémon...';
-  randomAssignButton.disabled = true;
 
-  try {
-    if (value === 'all') {
-      allowedIds = null;
-    } else {
-      if (!gameCache[value]) {
-        // Base game plus any DLC version groups that belong to it
-        const groupNames = [value].concat(Object.keys(DLC_PARENT).filter(function (k) {
-          return DLC_PARENT[k] === value;
-        }));
-        const ids = new Set();
-        for (const gName of groupNames) {
-          const vgResponse = await fetch('https://pokeapi.co/api/v2/version-group/' + gName);
-          if (!vgResponse.ok) continue;
-          const vg = await vgResponse.json();
-          for (const pd of (vg.pokedexes || [])) {
-            const pdResponse = await fetch(pd.url);
-            if (!pdResponse.ok) continue;
-            const pokedex = await pdResponse.json();
-            (pokedex.pokemon_entries || []).forEach(function (entry) {
-              const match = (entry.pokemon_species && entry.pokemon_species.url || '').match(/\/(\d+)\/?$/);
-              if (match) ids.add(parseInt(match[1], 10));
-            });
-          }
-        }
-        gameCache[value] = ids;
-      }
-      allowedIds = gameCache[value];
-    }
-  } catch (err) {
-    console.error(err);
+  if (value === 'all') {
+    allowedIds = null;
+  } else if (gamesData && gamesData[value]) {
+    allowedIds = new Set(gamesData[value].ids);
+  } else {
     allowedIds = null;
   }
 
   resetPokemon();
   renderAvailable();
-  randomAssignButton.disabled = false;
 });
 
 loadGames();
