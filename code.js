@@ -1,65 +1,145 @@
+// Pokémon Team Generator
+// Data is loaded from Pokedex.csv
 
-var pokeList = getColumn("Pokédex", "name");
-var pokeImages = getColumn("Pokédex", "image_url");
+let allPokemon = [];
+let availablePokemon = [];
 
-var availablePokemon = [];
+const peopleLabel = document.getElementById('peopleLabel');
+const pairLabel = document.getElementById('pairLabel');
+const randomAssignButton = document.getElementById('randomAssignButton');
+
+function parseCSV(text) {
+  // Strip a leading BOM if present
+  if (text.charCodeAt(0) === 0xFEFF) {
+    text = text.slice(1);
+  }
+  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+  const rows = [];
+  let row = [];
+  let field = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') {
+          field += '"';
+          i++;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        field += c;
+      }
+    } else {
+      if (c === '"') {
+        inQuotes = true;
+      } else if (c === ',') {
+        row.push(field);
+        field = '';
+      } else if (c === '\n') {
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = '';
+      } else {
+        field += c;
+      }
+    }
+  }
+
+  if (field !== '' || row.length > 0) {
+    row.push(field);
+    rows.push(row);
+  }
+
+  return rows.filter(function (r) {
+    return !(r.length === 1 && r[0] === '');
+  });
+}
 
 function resetPokemon() {
-  availablePokemon = [];
+  availablePokemon = allPokemon.map(function (p) {
+    return { name: p.name, image: p.image };
+  });
+}
 
-  for (var i = 0; i < pokeList.length; i++) {
-    appendItem(availablePokemon, {
-      name: pokeList[i],
-      image: pokeImages[i]
+function renderAvailable() {
+  peopleLabel.value = availablePokemon.map(function (p) {
+    return p.name;
+  }).join('\n');
+}
+
+async function loadPokemon() {
+  try {
+    const response = await fetch('Pokedex.csv');
+    if (!response.ok) {
+      throw new Error('Failed to load Pokedex.csv (' + response.status + ')');
+    }
+    const text = await response.text();
+    const rows = parseCSV(text);
+    if (rows.length === 0) {
+      throw new Error('Pokedex.csv is empty');
+    }
+
+    const headers = rows[0].map(function (h) {
+      return h.trim();
     });
+    const nameIndex = headers.indexOf('name');
+    const imageIndex = headers.indexOf('image_url');
+
+    if (nameIndex === -1 || imageIndex === -1) {
+      throw new Error('Pokedex.csv must contain "name" and "image_url" columns');
+    }
+
+    allPokemon = rows.slice(1).map(function (r) {
+      return {
+        name: (r[nameIndex] || '').trim(),
+        image: (r[imageIndex] || '').trim()
+      };
+    }).filter(function (p) {
+      return p.name.length > 0;
+    });
+
+    resetPokemon();
+    renderAvailable();
+  } catch (err) {
+    peopleLabel.value = 'Could not load Pokémon data.\n' + err.message;
+    console.error(err);
   }
 }
 
-resetPokemon();
-updateScreen();
-
-function updateScreen() {
-  var names = [];
-
-  for (var i = 0; i < availablePokemon.length; i++) {
-    appendItem(names, availablePokemon[i].name);
-  }
-
-  setProperty("peopleLabel", "text", names.join("\n"));
-}
-
-onEvent("randomAssignButton", "click", function() {
+randomAssignButton.addEventListener('click', function () {
   if (availablePokemon.length >= 6) {
-
-    var selectedPokemon = [];
-
-    for (var i = 0; i < 6; i++) {
-      var randomIndex = randomNumber(0, availablePokemon.length - 1);
-
-      appendItem(selectedPokemon, availablePokemon[randomIndex]);
-
-      removeItem(availablePokemon, randomIndex);
+    const selected = [];
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * availablePokemon.length);
+      selected.push(availablePokemon[randomIndex]);
+      availablePokemon.splice(randomIndex, 1);
     }
 
-    setProperty(
-      "pairLabel",
-      "text",
-      selectedPokemon[0].name + ", " +
-      selectedPokemon[1].name + ", " +
-      selectedPokemon[2].name + ", " +
-      selectedPokemon[3].name + ", " +
-      selectedPokemon[4].name + ", and " +
-      selectedPokemon[5].name
-    );
+    const names = selected.map(function (p) {
+      return p.name;
+    });
+    const last = names.pop();
+    pairLabel.textContent = names.join(', ') + ', and ' + last;
 
-    for (var i = 0; i < 6; i++) {
-      setImageURL("image" + (i + 1), selectedPokemon[i].image);
+    for (let i = 0; i < 6; i++) {
+      const img = document.getElementById('image' + (i + 1));
+      img.src = selected[i].image;
+      img.alt = selected[i].name;
     }
 
+    // Reset the pool after every press so each team is drawn from all Pokémon
+    resetPokemon();
   } else {
-    setProperty("pairLabel", "text", "Not enough Pokémon remaining!");
+    pairLabel.textContent = 'Not enough Pokémon remaining!';
     resetPokemon();
   }
 
-  updateScreen();
+  renderAvailable();
 });
+
+loadPokemon();

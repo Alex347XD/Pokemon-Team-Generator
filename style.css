@@ -1,27 +1,120 @@
-
-
-@font-face {
-  font-family: 'FontAwesome';
-  font-display: block;
-  src: url("applab/fa-brands-400.woff2") format('woff2');
+* {
+  box-sizing: border-box;
 }
 
-@font-face {
-  font-family: 'FontAwesome';
-  font-display: block;
-  src: url("applab/fa-solid-900.woff2") format('woff2');
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
+  background: linear-gradient(135deg, #eb5757, #c0392b);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
 }
 
-@font-face {
-  font-family: 'FontAwesome';
-  font-display: block;
-  src: url("applab/fa-regular-400.woff2") format("woff2");
-  unicode-range: U+F003,U+F006,U+F014,U+F016-F017,U+F01A-F01B,U+F01D,U+F022,U+F03E,U+F044,U+F046,U+F05C-F05D,U+F06E,U+F070,U+F087-F088,U+F08A,U+F094,U+F096-F097,U+F09D,U+F0A0,U+F0A2,U+F0A4-F0A7,U+F0C5,U+F0C7,U+F0E5-F0E6,U+F0EB,U+F0F6-F0F8,U+F10C,U+F114-F115,U+F118-F11A,U+F11C-F11D,U+F133,U+F147,U+F14E,U+F150-F152,U+F185-F186,U+F18E,U+F190-F192,U+F196,U+F1C1-F1C9,U+F1D9,U+F1DB,U+F1E3,U+F1EA,U+F1F7,U+F1F9,U+F20A,U+F247-F248,U+F24A,U+F24D,U+F255-F25B,U+F25D,U+F271-F274,U+F278,U+F27B,U+F28C,U+F28E,U+F29C,U+F2B5,U+F2B7,U+F2BA,U+F2BC,U+F2BE,U+F2C0-F2C1,U+F2C3,U+F2D0,U+F2D2,U+F2D4,U+F2DC;
+.app {
+  width: 360px;
+  max-width: 95vw;
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
 }
 
-@font-face {
-  font-family: 'FontAwesome';
-  font-display: block;
-  src: url("applab/fa-v4compatibility.woff2") format("woff2");
-  unicode-range: U+F041,U+F047,U+F065-F066,U+F07D-F07E,U+F080,U+F08B,U+F08E,U+F090,U+F09A,U+F0AC,U+F0AE,U+F0B2,U+F0D0,U+F0D6,U+F0E4,U+F0EC,U+F10A-F10B,U+F123,U+F13E,U+F148-F149,U+F14C,U+F156,U+F15E,U+F160-F161,U+F163,U+F175-F178,U+F195,U+F1F8,U+F219,U+F27A;
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-family: Georgia, serif;
+}
+
+.logo {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.panel h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  text-align: center;
+  background: #a53d3d;
+  padding: 8px;
+  border-radius: 6px;
+  border: 2px solid #fff;
+}
+
+#peopleLabel {
+  width: 100%;
+  height: 180px;
+  resize: none;
+  border: 2px solid #193a55;
+  border-radius: 6px;
+  background: #aee2f4;
+  color: #0094ca;
+  font-size: 14px;
+  padding: 8px;
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  margin: 14px 0;
+  padding: 10px;
+  border: none;
+  border-radius: 999px;
+  background: #0094ca;
+  color: #fff;
+  font-size: 15px;
+  font-family: Georgia, serif;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+  background: #0077a3;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.pair {
+  min-height: 40px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.37);
+  color: #0094ca;
+  border-radius: 10px;
+  padding: 8px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.images {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.images img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 2px;
 }
